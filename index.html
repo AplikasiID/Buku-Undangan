@@ -127,7 +127,7 @@ nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
 
 <script>
 // Isi URL Web App di sini agar permanen, atau atur di tab Input > Pengaturan koneksi.
-const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbxcLl4506y-zFUvBW5qNs4JDubRpkjzUxVbfIFUaS50j0_6P2JcxV2BNYB_bODDiSlNZw/exec';
+const DEFAULT_URL = '';
 let URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm;
 const $ = id => document.getElementById(id);
 const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
@@ -150,7 +150,7 @@ async function api(body) {
 }
 
 function card(r) {
-  return `<div class="it ${r.lunas ? 'ok' : 'no'}"><div class="inf"><b>${r.no}. ${esc(r.nama)}</b><span>${esc(r.daerah) || '-'}</span><em>${rp(r.isi)}</em>
+  return `<div class="it ${r.lunas ? 'ok' : 'no'}"><div class="inf"><b>${esc(r.nama)}</b><span>${esc(r.daerah) || '-'}</span><em>${rp(r.isi)}</em>
   <div class="act"><button data-e="${r.no}">Ubah</button><button class="d" data-d="${r.no}">Hapus</button></div></div>
   <label class="ck"><input type="checkbox" data-t="${r.no}" ${r.lunas ? 'checked' : ''}>${r.lunas ? 'Lunas' : 'Belum'}</label></div>`;
 }
@@ -198,7 +198,7 @@ $('fm').onsubmit = async e => {
 $('bt').onclick = resetForm;
 function onList(e) {
   const d = e.target.dataset;
-  if (d.e) { const r = data.find(x => x.no == d.e); editNo = r.no; $('nama').value = r.nama; $('daerah').value = r.daerah; $('isi').value = r.isi; $('lunas').checked = r.lunas; $('sv').textContent = 'Simpan perubahan'; $('banT').textContent = 'Mengubah data no. ' + r.no; $('ban').hidden = false; go('in'); }
+  if (d.e) { const r = data.find(x => x.no == d.e); editNo = r.no; $('nama').value = r.nama; $('daerah').value = r.daerah; $('isi').value = r.isi; $('lunas').checked = r.lunas; $('sv').textContent = 'Simpan perubahan'; $('banT').textContent = 'Mengubah data: ' + r.nama; $('ban').hidden = false; go('in'); }
   if (d.d && confirm('Hapus data ini?')) api({ action: 'delete', no: d.d });
 }
 $('l-no').onclick = $('l-ok').onclick = onList;

@@ -93,6 +93,10 @@ html[data-huruf=sistem]{--ff:system-ui,-apple-system,Roboto,'Segoe UI',Arial,san
 .sg button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .pv{border-left:8px solid var(--no);background:var(--nobg);border-radius:10px;padding:10px 12px}
 .pv b{display:block;font-size:calc(var(--u)*1.3125*var(--s))}.pv span{color:var(--mut);font-size:calc(var(--u)*1.0625*var(--s))}
+.arw{display:flex;align-items:flex-start;gap:6px}
+.arw .ars{flex:1;min-width:0}
+.ar{display:none;flex:0 0 auto;min-height:48px;min-width:44px;padding:0 12px;font-size:1.6rem;line-height:1}
+@media (hover:hover) and (pointer:fine){.ar{display:block}}
 @media (hover:hover){button:hover{filter:brightness(.96)}}
 @media (min-width:900px){
 body{display:grid;grid-template-columns:230px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"nav head" "nav main";height:100vh;padding-top:0}
@@ -107,7 +111,7 @@ nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
 .view{max-width:1100px}
 #v-in{max-width:760px}
 .srch input{max-width:420px}
-.ars{flex-wrap:wrap;overflow:visible;margin:0;padding:2px 0 12px}
+.ars{margin:0;padding:2px 0 12px}
 #l-no,#l-ok{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
 .it{margin-bottom:0}
 .empty{grid-column:1/-1}
@@ -128,13 +132,13 @@ nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
 <main>
   <section class="view on" id="v-no">
     <div class="srch"><input type="search" class="q" placeholder="Cari nama atau daerah"></div>
-    <div class="ars" id="a-no"></div>
+    <div class="arw"><button class="ar" data-s="-1" aria-label="Geser kiri">‹</button><div class="ars" id="a-no"></div><button class="ar" data-s="1" aria-label="Geser kanan">›</button></div>
     <div class="fs" id="f-no"></div>
     <div id="l-no"></div>
   </section>
   <section class="view" id="v-ok">
     <div class="srch"><input type="search" class="q" placeholder="Cari nama atau daerah"></div>
-    <div class="ars" id="a-ok"></div>
+    <div class="arw"><button class="ar" data-s="-1" aria-label="Geser kiri">‹</button><div class="ars" id="a-ok"></div><button class="ar" data-s="1" aria-label="Geser kanan">›</button></div>
     <div class="fs" id="f-ok"></div>
     <div id="l-ok"></div>
   </section>
@@ -188,7 +192,7 @@ nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
 
 <script>
 // Isi URL Web App di sini agar permanen, atau atur di tab Input > Pengaturan koneksi.
-const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbxcLl4506y-zFUvBW5qNs4JDubRpkjzUxVbfIFUaS50j0_6P2JcxV2BNYB_bODDiSlNZw/exec';
+const DEFAULT_URL = '';
 let URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm, pending = null;
 const $ = id => document.getElementById(id);
 const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
@@ -231,7 +235,9 @@ function chips(t, a) {
   if (sel[t] !== '#all' && !m.has(sel[t])) sel[t] = '#all';
   const arr = [...m].sort((x, y) => y[1].c - x[1].c || x[1].n.localeCompare(y[1].n));
   const one = (k, n, c, sm) => `<button class="ac ${sel[t] === k ? 'on' : ''}" data-k="${esc(k)}"><b>${esc(n)}</b><small>${c} tamu · ${sm}</small></button>`;
-  $('a-' + t).innerHTML = one('#all', 'Semua', a.length, rp(a.reduce((x, r) => x + r.isi, 0))) + arr.map(([k, o]) => one(k, o.n, o.c, rp(o.s))).join('');
+  const bar = $('a-' + t), x = bar.scrollLeft;
+  bar.innerHTML = one('#all', 'Semua', a.length, rp(a.reduce((x, r) => x + r.isi, 0))) + arr.map(([k, o]) => one(k, o.n, o.c, rp(o.s))).join('');
+  bar.scrollLeft = x;
 }
 function render() {
   const q = (document.querySelector('#v-' + tab + ' .q') || {}).value || '';
@@ -278,6 +284,7 @@ $('l-no').onchange = $('l-ok').onchange = e => {
   const r = data.find(x => x.no == t); r.lunas = e.target.checked; render();
   api({ action: 'toggle', no: t, lunas: r.lunas }).then(ok => { if (!ok) { r.lunas = !r.lunas; render(); } });
 };
+document.querySelectorAll('.ar').forEach(b => b.onclick = () => { const r = b.parentElement.querySelector('.ars'); r.scrollBy({ left: b.dataset.s * r.clientWidth * .8, behavior: 'smooth' }); });
 $('svu').onclick = () => saveUrl($('url').value);
 $('ms').onclick = () => saveUrl($('url2').value);
 $('mc').onclick = () => { pending = null; $('md').hidden = true; };

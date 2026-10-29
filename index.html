@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f6b4f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Undangan">
+<title>Catatan Undangan</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f5ef;--card:#fff;--ink:#101a2b;--mut:#465066;--line:#dde0d4;--ok:#2f6b4f;--okbg:#e3f2e8;--no:#b23a2d;--nobg:#fbe6e3;--on:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#12161d;--card:#1b212b;--ink:#e8ebf2;--mut:#98a1b3;--line:#2c3441;--ok:#6fbf96;--okbg:#17301f;--no:#e8857a;--nobg:#3a1e1b;--on:#10241a}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 'Atkinson Hyperlegible','Segoe UI',Roboto,Arial,sans-serif;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0)}
+header{padding:12px 16px 10px;background:var(--card);border-bottom:1px solid var(--line)}
+h1{font-size:23px;margin:0 0 8px}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sum div{border-radius:10px;padding:8px 10px}
+.sum small{display:block;font-size:15px}
+.sum b{font-size:20px;font-variant-numeric:tabular-nums}
+.s-no{background:var(--nobg);color:var(--no)}.s-ok{background:var(--okbg);color:var(--ok)}
+main{flex:1;overflow-y:auto;padding:12px 14px 16px}
+.view{display:none;max-width:640px;margin:0 auto}.view.on{display:block}
+.srch{display:flex;gap:8px;margin-bottom:10px}
+input[type=text],input[type=search],input:not([type]),textarea,input[type=file]{width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit}
+button{font:inherit;font-weight:700;min-height:48px;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:12px 16px}
+button.p{background:var(--ok);color:var(--on);border-color:var(--ok);width:100%}
+:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+.ars{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;margin:0 -14px;padding-left:14px;padding-right:14px;scroll-snap-type:x proximity;scrollbar-width:none}
+.ars::-webkit-scrollbar{display:none}
+.ac{flex:0 0 auto;scroll-snap-align:start;text-align:left;padding:10px 14px;min-width:120px;border-radius:14px;line-height:1.3}
+.ac b{display:block;font-size:18px;white-space:nowrap}.ac small{display:block;font-size:14px;color:var(--mut);font-weight:600;white-space:nowrap}
+#v-no .ac.on{background:var(--no);border-color:var(--no);color:var(--on)}
+#v-ok .ac.on{background:var(--ok);border-color:var(--ok);color:var(--on)}
+.ac.on small{color:inherit;opacity:.9}
+.fs{font-size:17px;font-weight:700;color:var(--mut);margin:0 0 8px}
+.it{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-left-width:8px;border-radius:14px;padding:14px;margin-bottom:12px}
+.it.no{border-left-color:var(--no)}.it.ok{border-left-color:var(--ok)}
+.inf{flex:1;min-width:0}
+.inf b{display:block;overflow-wrap:anywhere;font-size:21px;line-height:1.3}
+.inf span{display:block;color:var(--mut);font-size:17px}
+.inf em{font-style:normal;font-weight:700;font-size:20px;font-variant-numeric:tabular-nums}
+.no .inf em{color:var(--no)}.ok .inf em{color:var(--ok)}
+.act{display:flex;gap:10px;margin-top:6px}
+.act button{border:2px solid var(--line);min-height:44px;padding:8px 18px;font-size:17px;color:var(--ink)}
+.act .d{color:var(--no);border-color:var(--no)}
+.ck{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:15px;font-weight:700;min-width:68px}
+.ck input{width:40px;height:40px;accent-color:var(--ok);margin:0}
+.no .ck{color:var(--no)}.ok .ck{color:var(--ok)}
+.empty{text-align:center;color:var(--mut);padding:32px 12px;font-size:18px}
+.f{display:grid;gap:10px;margin-bottom:18px}
+.cg{display:flex;align-items:center;gap:12px}.cg input{width:32px;height:32px;accent-color:var(--ok)}
+.ban{background:var(--nobg);color:var(--no);padding:8px 12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.ban button{padding:4px 10px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+summary{font-weight:700;font-size:19px;cursor:pointer}
+details>*{margin-top:10px}
+textarea{height:100px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0)}
+nav button{border:0;border-radius:0;background:none;padding:10px 4px 9px;min-height:64px;font-size:15px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button i{font-style:normal;font-size:26px;line-height:1}
+nav button.on{color:var(--ink)}
+nav button.on[data-t=no]{color:var(--no);box-shadow:inset 0 3px var(--no)}
+nav button.on[data-t=ok]{color:var(--ok);box-shadow:inset 0 3px var(--ok)}
+nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
+#st{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:20px;font-size:17px;max-width:90%;display:none;z-index:9}
+</style>
+</head>
+<body>
+<header>
+  <h1>Catatan Undangan</h1>
+  <div class="sum">
+    <div class="s-no"><small id="cN">0 belum lunas</small><b id="tB">Rp 0</b></div>
+    <div class="s-ok"><small id="cL">0 lunas</small><b id="tL">Rp 0</b></div>
+  </div>
+</header>
+
+<main>
+  <section class="view on" id="v-no">
+    <div class="srch"><input type="search" class="q" placeholder="Cari nama atau daerah"></div>
+    <div class="ars" id="a-no"></div>
+    <div class="fs" id="f-no"></div>
+    <div id="l-no"></div>
+  </section>
+  <section class="view" id="v-ok">
+    <div class="srch"><input type="search" class="q" placeholder="Cari nama atau daerah"></div>
+    <div class="ars" id="a-ok"></div>
+    <div class="fs" id="f-ok"></div>
+    <div id="l-ok"></div>
+  </section>
+  <section class="view" id="v-in">
+    <div id="ban" class="ban" hidden><span id="banT"></span><button id="bt">Batal</button></div>
+    <form id="fm" class="f" style="margin-top:10px">
+      <input id="nama" placeholder="Nama" required>
+      <input id="daerah" placeholder="Daerah / jalan">
+      <input id="isi" inputmode="numeric" placeholder="Isi undangan (Rp)" required>
+      <label class="cg"><input type="checkbox" id="lunas"> Sudah lunas</label>
+      <button class="p" id="sv">Simpan</button>
+    </form>
+    <details>
+      <summary>Impor banyak data</summary>
+      <input type="file" id="fi" accept=".txt,.csv">
+      <textarea id="bulk" placeholder="nama, daerah, isi (satu baris per tamu)"></textarea>
+      <button class="p" id="imp">Impor</button>
+    </details>
+    <details>
+      <summary>Pengaturan koneksi</summary>
+      <input id="url" placeholder="https://script.google.com/macros/s/.../exec">
+      <button class="p" id="svu">Simpan URL</button>
+    </details>
+    <button id="ex" style="width:100%">Ekspor CSV</button>
+  </section>
+</main>
+
+<div id="st" role="status"></div>
+<nav>
+  <button data-t="no" class="on"><i>○</i>Belum lunas <span id="bN"></span></button>
+  <button data-t="ok"><i>✓</i>Lunas <span id="bL"></span></button>
+  <button data-t="in"><i>＋</i>Input</button>
+</nav>
+
+<script>
+// Isi URL Web App di sini agar permanen, atau atur di tab Input > Pengaturan koneksi.
+const DEFAULT_URL = '';
+let URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm;
+const $ = id => document.getElementById(id);
+const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num = s => Number(String(s).replace(/[^\d]/g, '')) || 0;
+const say = t => { const s = $('st'); s.textContent = t; s.style.display = t ? 'block' : 'none'; clearTimeout(tm); if (t) tm = setTimeout(() => s.style.display = 'none', 3500); };
+try { URL_ = localStorage.getItem('url') || DEFAULT_URL; data = JSON.parse(localStorage.getItem('cache') || '[]'); } catch (e) {}
+$('url').value = URL_;
+
+async function api(body) {
+  if (!URL_) { say('Atur URL Web App di tab Input > Pengaturan koneksi.'); return false; }
+  say('Memproses…');
+  try {
+    const r = body ? await fetch(URL_, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(body) }) : await fetch(URL_);
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    data = j.data; try { localStorage.setItem('cache', JSON.stringify(data)); } catch (e) {}
+    say(body ? 'Tersimpan' : ''); render(); return true;
+  } catch (e) { say('Gagal terhubung. Periksa URL dan izin Web App.'); return false; }
+}
+
+function card(r) {
+  return `<div class="it ${r.lunas ? 'ok' : 'no'}"><div class="inf"><b>${r.no}. ${esc(r.nama)}</b><span>${esc(r.daerah) || '-'}</span><em>${rp(r.isi)}</em>
+  <div class="act"><button data-e="${r.no}">Ubah</button><button class="d" data-d="${r.no}">Hapus</button></div></div>
+  <label class="ck"><input type="checkbox" data-t="${r.no}" ${r.lunas ? 'checked' : ''}>${r.lunas ? 'Lunas' : 'Belum'}</label></div>`;
+}
+const sel = { no: '#all', ok: '#all' };
+const akey = r => (r.daerah || '').trim().toLowerCase();
+function chips(t, a) {
+  const m = new Map();
+  a.forEach(r => { const k = akey(r), o = m.get(k) || { n: (r.daerah || '').trim() || 'Tanpa daerah', c: 0, s: 0 }; o.c++; o.s += r.isi; m.set(k, o); });
+  if (sel[t] !== '#all' && !m.has(sel[t])) sel[t] = '#all';
+  const arr = [...m].sort((x, y) => y[1].c - x[1].c || x[1].n.localeCompare(y[1].n));
+  const one = (k, n, c, sm) => `<button class="ac ${sel[t] === k ? 'on' : ''}" data-k="${esc(k)}"><b>${esc(n)}</b><small>${c} tamu · ${sm}</small></button>`;
+  $('a-' + t).innerHTML = one('#all', 'Semua', a.length, rp(a.reduce((x, r) => x + r.isi, 0))) + arr.map(([k, o]) => one(k, o.n, o.c, rp(o.s))).join('');
+}
+function render() {
+  const q = (document.querySelector('#v-' + tab + ' .q') || {}).value || '';
+  const no = data.filter(r => !r.lunas), lu = data.filter(r => r.lunas);
+  const sum = a => a.reduce((t, r) => t + r.isi, 0);
+  $('tB').textContent = rp(sum(no)); $('tL').textContent = rp(sum(lu));
+  $('cN').textContent = no.length + ' belum lunas'; $('cL').textContent = lu.length + ' lunas';
+  $('bN').textContent = no.length ? '(' + no.length + ')' : ''; $('bL').textContent = lu.length ? '(' + lu.length + ')' : '';
+  const fill = (t, a, msg) => {
+    chips(t, a);
+    const f = a.filter(x => (x.nama + ' ' + x.daerah).toLowerCase().includes(q.toLowerCase()) && (sel[t] === '#all' || akey(x) === sel[t]));
+    $('f-' + t).textContent = (q || sel[t] !== '#all') ? f.length + ' tamu · ' + rp(sum(f)) : '';
+    $('l-' + t).innerHTML = f.length ? f.map(card).join('') : `<div class="empty">${q || sel[t] !== '#all' ? 'Tidak ada yang cocok.' : msg}</div>`;
+  };
+  fill('no', no, data.length ? 'Semua sudah lunas.' : 'Belum ada data. Buka tab Input untuk menambah tamu.');
+  fill('ok', lu, 'Belum ada yang lunas. Centang kotak di tab Belum lunas.');
+}
+function go(t) {
+  tab = t;
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + t));
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  document.querySelector('main').scrollTo(0, 0); render();
+}
+function resetForm() { editNo = null; $('fm').reset(); $('sv').textContent = 'Simpan'; $('ban').hidden = true; }
+
+document.querySelector('nav').onclick = e => { const b = e.target.closest('button'); if (b) go(b.dataset.t); };
+document.querySelectorAll('.q').forEach(i => i.oninput = render);
+$('fm').onsubmit = async e => {
+  e.preventDefault();
+  const b = { nama: $('nama').value.trim(), daerah: $('daerah').value.trim(), isi: num($('isi').value), lunas: $('lunas').checked };
+  if (await api(editNo ? { action: 'update', no: editNo, ...b } : { action: 'add', ...b })) { resetForm(); $('nama').focus(); }
+};
+$('bt').onclick = resetForm;
+function onList(e) {
+  const d = e.target.dataset;
+  if (d.e) { const r = data.find(x => x.no == d.e); editNo = r.no; $('nama').value = r.nama; $('daerah').value = r.daerah; $('isi').value = r.isi; $('lunas').checked = r.lunas; $('sv').textContent = 'Simpan perubahan'; $('banT').textContent = 'Mengubah data no. ' + r.no; $('ban').hidden = false; go('in'); }
+  if (d.d && confirm('Hapus data ini?')) api({ action: 'delete', no: d.d });
+}
+$('l-no').onclick = $('l-ok').onclick = onList;
+['no', 'ok'].forEach(t => $('a-' + t).onclick = e => { const b = e.target.closest('button'); if (b) { sel[t] = b.dataset.k; render(); } });
+$('l-no').onchange = $('l-ok').onchange = e => {
+  const t = e.target.dataset.t; if (!t) return;
+  const r = data.find(x => x.no == t); r.lunas = e.target.checked; render();
+  api({ action: 'toggle', no: t, lunas: r.lunas });
+};
+$('svu').onclick = () => { URL_ = $('url').value.trim(); try { localStorage.setItem('url', URL_); } catch (e) {} api(); };
+$('fi').onchange = e => { const f = e.target.files[0]; if (f) f.text().then(t => $('bulk').value = t); };
+$('imp').onclick = async () => {
+  const rows = $('bulk').value.split('\n').map(l => l.split(/\t|,/).map(s => s.trim())).filter(c => c[0]).map(c => ({ nama: c[0], daerah: c[1] || '', isi: num(c[2]) }));
+  if (rows.length && await api({ action: 'bulk', rows })) $('bulk').value = '';
+};
+$('ex').onclick = () => {
+  const csv = ['No,Nama,Daerah/Jalan,Isi Undang,Lunas', ...data.map(r => [r.no, r.nama, r.daerah, r.isi, r.lunas ? 'Ya' : 'Belum'].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))].join('\n');
+  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = 'catatan-undangan.csv'; a.click();
+};
+render(); if (URL_) api();
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+</script>
+</body>
+</html>

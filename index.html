@@ -11,19 +11,20 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Undangan">
 <title>Catatan Undangan</title>
+<script>try{var d=document.documentElement;d.dataset.ukuran=localStorage.getItem('ukuran')||'otomatis';d.dataset.huruf=localStorage.getItem('huruf')||'mudah'}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f5ef;--card:#fff;--ink:#101a2b;--mut:#465066;--line:#dde0d4;--ok:#2f6b4f;--okbg:#e3f2e8;--no:#b23a2d;--nobg:#fbe6e3;--on:#fff}
+:root{--u:1rem;--s:.9;--ff:'Atkinson Hyperlegible','Segoe UI',Roboto,Arial,sans-serif;--bg:#f4f5ef;--card:#fff;--ink:#101a2b;--mut:#465066;--line:#dde0d4;--ok:#2f6b4f;--okbg:#e3f2e8;--no:#b23a2d;--nobg:#fbe6e3;--on:#fff}
 @media(prefers-color-scheme:dark){:root{--bg:#12161d;--card:#1b212b;--ink:#e8ebf2;--mut:#98a1b3;--line:#2c3441;--ok:#6fbf96;--okbg:#17301f;--no:#e8857a;--nobg:#3a1e1b;--on:#10241a}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 'Atkinson Hyperlegible','Segoe UI',Roboto,Arial,sans-serif;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0)}
+body{margin:0;background:var(--bg);color:var(--ink);font:calc(var(--u)*1.125*var(--s))/1.5 var(--ff);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0)}
 header{padding:12px 16px 10px;background:var(--card);border-bottom:1px solid var(--line)}
-h1{font-size:23px;margin:0 0 8px}
+h1{font-size:calc(var(--u)*1.4375*var(--s));margin:0 0 8px}
 .sum{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sum div{border-radius:10px;padding:8px 10px}
-.sum small{display:block;font-size:15px}
-.sum b{font-size:20px;font-variant-numeric:tabular-nums}
+.sum div{border-radius:10px;padding:8px}
+.sum small{display:block;font-size:calc(var(--u)*0.9375*var(--s))}
+.sum b{white-space:nowrap;font-size:calc(var(--u)*1.125*var(--s));font-variant-numeric:tabular-nums}
 .s-no{background:var(--nobg);color:var(--no)}.s-ok{background:var(--okbg);color:var(--ok)}
 main{flex:1;overflow-y:auto;padding:12px 14px 16px}
 .view{display:none;max-width:640px;margin:0 auto}.view.on{display:block}
@@ -35,41 +36,83 @@ button.p{background:var(--ok);color:var(--on);border-color:var(--ok);width:100%}
 .ars{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;margin:0 -14px;padding-left:14px;padding-right:14px;scroll-snap-type:x proximity;scrollbar-width:none}
 .ars::-webkit-scrollbar{display:none}
 .ac{flex:0 0 auto;scroll-snap-align:start;text-align:left;padding:10px 14px;min-width:120px;border-radius:14px;line-height:1.3}
-.ac b{display:block;font-size:18px;white-space:nowrap}.ac small{display:block;font-size:14px;color:var(--mut);font-weight:600;white-space:nowrap}
+.ac b{display:block;font-size:calc(var(--u)*1.125*var(--s));white-space:nowrap}.ac small{display:block;font-size:calc(var(--u)*0.875*var(--s));color:var(--mut);font-weight:600;white-space:nowrap}
 #v-no .ac.on{background:var(--no);border-color:var(--no);color:var(--on)}
 #v-ok .ac.on{background:var(--ok);border-color:var(--ok);color:var(--on)}
 .ac.on small{color:inherit;opacity:.9}
-.fs{font-size:17px;font-weight:700;color:var(--mut);margin:0 0 8px}
+.fs{font-size:calc(var(--u)*1.0625*var(--s));font-weight:700;color:var(--mut);margin:0 0 8px}
 .it{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-left-width:8px;border-radius:14px;padding:14px;margin-bottom:12px}
 .it.no{border-left-color:var(--no)}.it.ok{border-left-color:var(--ok)}
 .inf{flex:1;min-width:0}
-.inf b{display:block;overflow-wrap:anywhere;font-size:21px;line-height:1.3}
-.inf span{display:block;color:var(--mut);font-size:17px}
-.inf em{font-style:normal;font-weight:700;font-size:20px;font-variant-numeric:tabular-nums}
+.inf b{display:block;overflow-wrap:anywhere;font-size:calc(var(--u)*1.3125*var(--s));line-height:1.3}
+.inf span{display:block;color:var(--mut);font-size:calc(var(--u)*1.0625*var(--s))}
+.inf em{font-style:normal;font-weight:700;font-size:calc(var(--u)*1.25*var(--s));font-variant-numeric:tabular-nums}
 .no .inf em{color:var(--no)}.ok .inf em{color:var(--ok)}
 .act{display:flex;gap:10px;margin-top:6px}
-.act button{border:2px solid var(--line);min-height:44px;padding:8px 18px;font-size:17px;color:var(--ink)}
+.act button{border:2px solid var(--line);min-height:44px;padding:8px 18px;font-size:calc(var(--u)*1.0625*var(--s));color:var(--ink)}
 .act .d{color:var(--no);border-color:var(--no)}
-.ck{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:15px;font-weight:700;min-width:68px}
+.ck{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:calc(var(--u)*0.9375*var(--s));font-weight:700;min-width:68px}
 .ck input{width:40px;height:40px;accent-color:var(--ok);margin:0}
 .no .ck{color:var(--no)}.ok .ck{color:var(--ok)}
-.empty{text-align:center;color:var(--mut);padding:32px 12px;font-size:18px}
+.empty{text-align:center;color:var(--mut);padding:32px 12px;font-size:calc(var(--u)*1.125*var(--s))}
 .f{display:grid;gap:10px;margin-bottom:18px}
 .cg{display:flex;align-items:center;gap:12px}.cg input{width:32px;height:32px;accent-color:var(--ok)}
 .ban{background:var(--nobg);color:var(--no);padding:8px 12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
 .ban button{padding:4px 10px}
 details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
-summary{font-weight:700;font-size:19px;cursor:pointer}
+summary{font-weight:700;font-size:calc(var(--u)*1.1875*var(--s));cursor:pointer}
 details>*{margin-top:10px}
 textarea{height:100px}
 nav{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0)}
-nav button{border:0;border-radius:0;background:none;padding:10px 4px 9px;min-height:64px;font-size:15px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
-nav button i{font-style:normal;font-size:26px;line-height:1}
+nav button{border:0;border-radius:0;background:none;padding:10px 4px 9px;min-height:64px;font-size:calc(var(--u)*0.9375*var(--s));color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button i{font-style:normal;font-size:calc(var(--u)*1.625*var(--s));line-height:1}
 nav button.on{color:var(--ink)}
 nav button.on[data-t=no]{color:var(--no);box-shadow:inset 0 3px var(--no)}
 nav button.on[data-t=ok]{color:var(--ok);box-shadow:inset 0 3px var(--ok)}
 nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
-#st{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:20px;font-size:17px;max-width:90%;display:none;z-index:9}
+#st{position:fixed;left:14px;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0));background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;font-size:calc(var(--u)*1.0625*var(--s));font-weight:700;text-align:center;display:none;z-index:9;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+#st.bad{background:var(--no);color:var(--on)}
+.cb{display:block;width:100%;margin-top:8px;border-color:var(--no);background:var(--nobg);color:var(--no);font-size:calc(var(--u)*1.0*var(--s));min-height:44px;padding:8px 12px}
+.md{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.md[hidden]{display:none}
+.mb{background:var(--card);border-radius:16px;padding:20px;width:100%;max-width:420px;display:grid;gap:12px}
+.mb h2{margin:0;font-size:calc(var(--u)*1.375*var(--s))}.mb p{margin:0;color:var(--mut);font-size:calc(var(--u)*1.0625*var(--s))}
+.mr{display:grid;grid-template-columns:1fr 2fr;gap:10px}.mr .p{width:auto}
+html[data-ukuran=standar]{--u:16px;--s:.9}
+html[data-ukuran=besar]{--u:16px;--s:1}
+html[data-ukuran=sangat]{--u:16px;--s:1.15}
+@supports (font:-apple-system-body){html[data-ukuran=otomatis]{font:-apple-system-body}}
+#sgU{grid-template-columns:1fr 1fr;grid-auto-flow:row}
+.hn{margin:0;color:var(--mut);font-size:calc(var(--u)*.9375*var(--s))}
+html[data-huruf=sistem]{--ff:system-ui,-apple-system,Roboto,'Segoe UI',Arial,sans-serif}
+.tp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;display:grid;gap:10px}
+.tp h2{margin:0;font-size:calc(var(--u)*1.1875*var(--s))}
+.tp label{color:var(--mut);font-weight:700}
+.sg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.sg button{padding:8px 6px}
+.sg button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pv{border-left:8px solid var(--no);background:var(--nobg);border-radius:10px;padding:10px 12px}
+.pv b{display:block;font-size:calc(var(--u)*1.3125*var(--s))}.pv span{color:var(--mut);font-size:calc(var(--u)*1.0625*var(--s))}
+@media (hover:hover){button:hover{filter:brightness(.96)}}
+@media (min-width:900px){
+body{display:grid;grid-template-columns:230px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"nav head" "nav main";height:100vh;padding-top:0}
+header{grid-area:head;padding:16px 28px}
+.sum{max-width:520px}
+main{grid-area:main;padding:20px 28px;min-height:0}
+nav{grid-area:nav;display:flex;flex-direction:column;align-content:start;gap:6px;padding:20px 12px;border-top:0;border-right:1px solid var(--line)}
+nav button{flex-direction:row;justify-content:flex-start;gap:12px;padding:10px 14px;border-radius:12px;min-height:56px;font-size:calc(var(--u)*1.0625*var(--s))}
+nav button.on[data-t=no]{box-shadow:inset 5px 0 var(--no);background:var(--nobg)}
+nav button.on[data-t=ok]{box-shadow:inset 5px 0 var(--ok);background:var(--okbg)}
+nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
+.view{max-width:1100px}
+#v-in{max-width:760px}
+.srch input{max-width:420px}
+.ars{flex-wrap:wrap;overflow:visible;margin:0;padding:2px 0 12px}
+#l-no,#l-ok{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.it{margin-bottom:0}
+.empty{grid-column:1/-1}
+#st{left:calc(230px + 28px);right:28px;bottom:24px;max-width:560px}
+}
 </style>
 </head>
 <body>
@@ -79,6 +122,7 @@ nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
     <div class="s-no"><small id="cN">0 belum lunas</small><b id="tB">Rp 0</b></div>
     <div class="s-ok"><small id="cL">0 lunas</small><b id="tL">Rp 0</b></div>
   </div>
+  <button class="cb" id="cb" hidden>Belum tersambung ke Spreadsheet. Ketuk untuk mengatur.</button>
 </header>
 
 <main>
@@ -103,6 +147,15 @@ nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
       <label class="cg"><input type="checkbox" id="lunas"> Sudah lunas</label>
       <button class="p" id="sv">Simpan</button>
     </form>
+    <div class="tp">
+      <h2>Tampilan tulisan</h2>
+      <label>Ukuran</label>
+      <div class="sg" id="sgU"><button data-v="otomatis">Ikuti HP</button><button data-v="standar">Standar</button><button data-v="besar">Besar</button><button data-v="sangat">Sangat besar</button></div>
+      <p class="hn">Ikuti HP: mengikuti ukuran font di pengaturan HP masing-masing (Pengaturan &gt; Tampilan &gt; Ukuran font).</p>
+      <label>Jenis huruf</label>
+      <div class="sg" id="sgH"><button data-v="mudah">Mudah dibaca</button><button data-v="sistem">Bawaan HP</button></div>
+      <div class="pv"><b>Sumarlina Umar</b><span>Pesantren</span></div>
+    </div>
     <details>
       <summary>Impor banyak data</summary>
       <input type="file" id="fi" accept=".txt,.csv">
@@ -119,6 +172,14 @@ nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
 </main>
 
 <div id="st" role="status"></div>
+<div class="md" id="md" hidden>
+  <div class="mb" role="dialog" aria-labelledby="mt">
+    <h2 id="mt">Hubungkan ke Spreadsheet</h2>
+    <p>Tempel link Web App dari Apps Script (berakhiran /exec). Cukup sekali di HP ini.</p>
+    <input id="url2" placeholder="https://script.google.com/macros/s/.../exec">
+    <div class="mr"><button id="mc">Nanti</button><button class="p" id="ms">Simpan</button></div>
+  </div>
+</div>
 <nav>
   <button data-t="no" class="on"><i>○</i>Belum lunas <span id="bN"></span></button>
   <button data-t="ok"><i>✓</i>Lunas <span id="bL"></span></button>
@@ -128,25 +189,33 @@ nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
 <script>
 // Isi URL Web App di sini agar permanen, atau atur di tab Input > Pengaturan koneksi.
 const DEFAULT_URL = '';
-let URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm;
+let URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm, pending = null;
 const $ = id => document.getElementById(id);
 const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num = s => Number(String(s).replace(/[^\d]/g, '')) || 0;
-const say = t => { const s = $('st'); s.textContent = t; s.style.display = t ? 'block' : 'none'; clearTimeout(tm); if (t) tm = setTimeout(() => s.style.display = 'none', 3500); };
+const say = (t, bad) => { const s = $('st'); s.textContent = t; s.className = bad ? 'bad' : ''; s.style.display = t ? 'block' : 'none'; clearTimeout(tm); if (t) tm = setTimeout(() => s.style.display = 'none', bad ? 6000 : 2500); };
 try { URL_ = localStorage.getItem('url') || DEFAULT_URL; data = JSON.parse(localStorage.getItem('cache') || '[]'); } catch (e) {}
-$('url').value = URL_;
+$('url').value = URL_; $('url2').value = URL_;
 
-async function api(body) {
-  if (!URL_) { say('Atur URL Web App di tab Input > Pengaturan koneksi.'); return false; }
+async function api(body, onOk) {
+  if (!URL_) { pending = body ? { body, onOk } : null; $('md').hidden = false; $('url2').focus(); return false; }
   say('Memproses…');
   try {
     const r = body ? await fetch(URL_, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(body) }) : await fetch(URL_);
     const j = await r.json();
     if (!j.ok) throw new Error(j.error);
     data = j.data; try { localStorage.setItem('cache', JSON.stringify(data)); } catch (e) {}
-    say(body ? 'Tersimpan' : ''); render(); return true;
-  } catch (e) { say('Gagal terhubung. Periksa URL dan izin Web App.'); return false; }
+    say(body ? 'Tersimpan ✓' : ''); render(); if (onOk) onOk(); return true;
+  } catch (e) { say('Gagal menyimpan. Periksa internet, atau pastikan link Web App benar dan aksesnya "Anyone".', true); return false; }
+}
+async function saveUrl(v) {
+  v = v.trim();
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)) { say('Link tidak sesuai. Harus diawali https://script.google.com dan diakhiri /exec.', true); return; }
+  URL_ = v; try { localStorage.setItem('url', v); } catch (e) {}
+  $('url').value = v; $('url2').value = v; $('md').hidden = true; render();
+  const p = pending; pending = null;
+  await (p ? api(p.body, p.onOk) : api());
 }
 
 function card(r) {
@@ -168,6 +237,7 @@ function render() {
   const q = (document.querySelector('#v-' + tab + ' .q') || {}).value || '';
   const no = data.filter(r => !r.lunas), lu = data.filter(r => r.lunas);
   const sum = a => a.reduce((t, r) => t + r.isi, 0);
+  $('cb').hidden = !!URL_;
   $('tB').textContent = rp(sum(no)); $('tL').textContent = rp(sum(lu));
   $('cN').textContent = no.length + ' belum lunas'; $('cL').textContent = lu.length + ' lunas';
   $('bN').textContent = no.length ? '(' + no.length + ')' : ''; $('bL').textContent = lu.length ? '(' + lu.length + ')' : '';
@@ -193,7 +263,7 @@ document.querySelectorAll('.q').forEach(i => i.oninput = render);
 $('fm').onsubmit = async e => {
   e.preventDefault();
   const b = { nama: $('nama').value.trim(), daerah: $('daerah').value.trim(), isi: num($('isi').value), lunas: $('lunas').checked };
-  if (await api(editNo ? { action: 'update', no: editNo, ...b } : { action: 'add', ...b })) { resetForm(); $('nama').focus(); }
+  api(editNo ? { action: 'update', no: editNo, ...b } : { action: 'add', ...b }, () => { resetForm(); $('nama').focus(); });
 };
 $('bt').onclick = resetForm;
 function onList(e) {
@@ -206,18 +276,32 @@ $('l-no').onclick = $('l-ok').onclick = onList;
 $('l-no').onchange = $('l-ok').onchange = e => {
   const t = e.target.dataset.t; if (!t) return;
   const r = data.find(x => x.no == t); r.lunas = e.target.checked; render();
-  api({ action: 'toggle', no: t, lunas: r.lunas });
+  api({ action: 'toggle', no: t, lunas: r.lunas }).then(ok => { if (!ok) { r.lunas = !r.lunas; render(); } });
 };
-$('svu').onclick = () => { URL_ = $('url').value.trim(); try { localStorage.setItem('url', URL_); } catch (e) {} api(); };
+$('svu').onclick = () => saveUrl($('url').value);
+$('ms').onclick = () => saveUrl($('url2').value);
+$('mc').onclick = () => { pending = null; $('md').hidden = true; };
+$('cb').onclick = () => { $('md').hidden = false; $('url2').focus(); };
 $('fi').onchange = e => { const f = e.target.files[0]; if (f) f.text().then(t => $('bulk').value = t); };
 $('imp').onclick = async () => {
   const rows = $('bulk').value.split('\n').map(l => l.split(/\t|,/).map(s => s.trim())).filter(c => c[0]).map(c => ({ nama: c[0], daerah: c[1] || '', isi: num(c[2]) }));
-  if (rows.length && await api({ action: 'bulk', rows })) $('bulk').value = '';
+  if (rows.length) api({ action: 'bulk', rows }, () => $('bulk').value = '');
 };
 $('ex').onclick = () => {
   const csv = ['No,Nama,Daerah/Jalan,Isi Undang,Lunas', ...data.map(r => [r.no, r.nama, r.daerah, r.isi, r.lunas ? 'Ya' : 'Belum'].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))].join('\n');
   const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = 'catatan-undangan.csv'; a.click();
 };
+
+function applyLook() {
+  const d = document.documentElement;
+  document.querySelectorAll('#sgU button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === d.dataset.ukuran));
+  document.querySelectorAll('#sgH button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === d.dataset.huruf));
+}
+[['sgU', 'ukuran'], ['sgH', 'huruf']].forEach(([id, k]) => $(id).onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.documentElement.dataset[k] = b.dataset.v; try { localStorage.setItem(k, b.dataset.v); } catch (x) {} applyLook();
+});
+applyLook();
 render(); if (URL_) api();
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 </script>

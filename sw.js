@@ -1,6 +1,6 @@
 // Service worker Catatan Undangan.
 // Naikkan VERSI setiap kali index.html diganti agar HP mengambil versi baru.
-const VERSI = 'undangan-v1';
+const VERSI = 'undangan-v2';
 const INTI = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

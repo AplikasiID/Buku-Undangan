@@ -71,13 +71,15 @@ nav button.on{color:var(--ink)}
 nav button.on[data-t=no]{color:var(--no);box-shadow:inset 0 3px var(--no)}
 nav button.on[data-t=ok]{color:var(--ok);box-shadow:inset 0 3px var(--ok)}
 nav button.on[data-t=in]{box-shadow:inset 0 3px var(--ink)}
-#st{position:fixed;left:14px;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0));background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;font-size:calc(var(--u)*1.0625*var(--s));font-weight:700;text-align:center;display:none;z-index:9;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+#st{position:fixed;left:14px;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0));background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;font-size:calc(var(--u)*1.0625*var(--s));font-weight:700;text-align:center;display:none;z-index:30;box-shadow:0 4px 16px rgba(0,0,0,.35)}
 #st.bad{background:var(--no);color:var(--on)}
 .cb{display:block;width:100%;margin-top:8px;border-color:var(--no);background:var(--nobg);color:var(--no);font-size:calc(var(--u)*1.0*var(--s));min-height:44px;padding:8px 12px}
 .md{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
 .md[hidden]{display:none}
 .mb{background:var(--card);border-radius:16px;padding:20px;width:100%;max-width:420px;display:grid;gap:12px}
 .mb h2{margin:0;font-size:calc(var(--u)*1.375*var(--s))}.mb p{margin:0;color:var(--mut);font-size:calc(var(--u)*1.0625*var(--s))}
+.p.dg{background:var(--no);border-color:var(--no);color:var(--on)}
+#mdel .pv span{display:block}
 .mr{display:grid;grid-template-columns:1fr 2fr;gap:10px}.mr .p{width:auto}
 html[data-ukuran=standar]{--u:16px;--s:.9}
 html[data-ukuran=besar]{--u:16px;--s:1}
@@ -144,7 +146,6 @@ nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
     <div id="l-ok"></div>
   </section>
   <section class="view" id="v-in">
-    <div id="ban" class="ban" hidden><span id="banT"></span><button id="bt">Batal</button></div>
     <form id="fm" class="f" style="margin-top:10px">
       <input id="nama" placeholder="Nama" required>
       <input id="daerah" placeholder="Daerah / jalan">
@@ -185,6 +186,26 @@ nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
     <div class="mr"><button id="mc">Nanti</button><button class="p" id="ms">Simpan</button></div>
   </div>
 </div>
+<div class="md" id="mdit" hidden>
+  <div class="mb" role="dialog" aria-labelledby="et">
+    <h2 id="et">Ubah data</h2>
+    <form id="fe" style="display:grid;gap:12px">
+      <input id="en" placeholder="Nama" required>
+      <input id="ed" placeholder="Daerah / jalan">
+      <input id="ei" inputmode="numeric" placeholder="Isi undangan (Rp)" required>
+      <label class="cg"><input type="checkbox" id="el"> Sudah lunas</label>
+      <div class="mr"><button type="button" id="eb">Batal</button><button type="submit" class="p" id="es">Simpan perubahan</button></div>
+    </form>
+  </div>
+</div>
+<div class="md" id="mdel" hidden>
+  <div class="mb" role="alertdialog" aria-labelledby="dt">
+    <h2 id="dt">Hapus data ini?</h2>
+    <div class="pv"><b id="dn"></b><span id="dd"></span><span id="di"></span></div>
+    <p>Periksa lagi, pastikan ini data yang benar-benar mau dihapus.</p>
+    <div class="mr"><button id="dc">Batal</button><button class="p dg" id="dy">Ya, hapus</button></div>
+  </div>
+</div>
 <nav>
   <button data-t="no" class="on"><i>○</i>Belum lunas <span id="bN"></span></button>
   <button data-t="ok"><i>✓</i>Lunas <span id="bL"></span></button>
@@ -194,7 +215,7 @@ nav button.on[data-t=in]{box-shadow:inset 5px 0 var(--ink);background:var(--bg)}
 <script>
 // Isi URL Web App di sini agar permanen, atau atur di tab Input > Pengaturan koneksi.
 const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbxcLl4506y-zFUvBW5qNs4JDubRpkjzUxVbfIFUaS50j0_6P2JcxV2BNYB_bODDiSlNZw/exec';
-let URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm, pending = null;
+let delNo = null, URL_ = DEFAULT_URL, data = [], editNo = null, tab = 'no', tm, pending = null;
 const $ = id => document.getElementById(id);
 const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -263,20 +284,28 @@ function go(t) {
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
   document.querySelector('main').scrollTo(0, 0); render();
 }
-function resetForm() { editNo = null; $('fm').reset(); $('sv').textContent = 'Simpan'; $('ban').hidden = true; }
+function resetForm() { $('fm').reset(); }
 
 document.querySelector('nav').onclick = e => { const b = e.target.closest('button'); if (b) go(b.dataset.t); };
 document.querySelectorAll('.q').forEach(i => i.oninput = render);
 $('fm').onsubmit = async e => {
   e.preventDefault();
   const b = { nama: $('nama').value.trim(), daerah: $('daerah').value.trim(), isi: num($('isi').value), lunas: $('lunas').checked };
-  api(editNo ? { action: 'update', no: editNo, ...b } : { action: 'add', ...b }, () => { resetForm(); $('nama').focus(); });
+  api({ action: 'add', ...b }, () => { resetForm(); $('nama').focus(); });
 };
-$('bt').onclick = resetForm;
 function onList(e) {
   const d = e.target.dataset;
-  if (d.e) { const r = data.find(x => x.no == d.e); editNo = r.no; $('nama').value = r.nama; $('daerah').value = r.daerah; $('isi').value = r.isi; $('lunas').checked = r.lunas; $('sv').textContent = 'Simpan perubahan'; $('banT').textContent = 'Mengubah data: ' + r.nama; $('ban').hidden = false; go('in'); }
-  if (d.d && confirm('Hapus data ini?')) api({ action: 'delete', no: d.d });
+  if (d.e) {
+    const r = data.find(x => x.no == d.e); if (!r) return;
+    editNo = r.no; $('en').value = r.nama; $('ed').value = r.daerah || ''; $('ei').value = r.isi; $('el').checked = !!r.lunas;
+    $('mdit').hidden = false; $('en').focus();
+  }
+  if (d.d) {
+    const r = data.find(x => x.no == d.d); if (!r) return;
+    delNo = r.no; $('dn').textContent = r.nama; $('dd').textContent = r.daerah || '-';
+    $('di').textContent = rp(r.isi) + ' · ' + (r.lunas ? 'Lunas' : 'Belum lunas');
+    $('mdel').hidden = false; $('dc').focus();
+  }
 }
 $('l-no').onclick = $('l-ok').onclick = onList;
 ['no', 'ok'].forEach(t => $('a-' + t).onclick = e => { const b = e.target.closest('button'); if (b) { sel[t] = b.dataset.k; render(); } });
@@ -286,6 +315,21 @@ $('l-no').onchange = $('l-ok').onchange = e => {
   api({ action: 'toggle', no: t, lunas: r.lunas }).then(ok => { if (!ok) { r.lunas = !r.lunas; render(); } });
 };
 document.querySelectorAll('.ar').forEach(b => b.onclick = () => { const r = b.parentElement.querySelector('.ars'); r.scrollBy({ left: b.dataset.s * r.clientWidth * .8, behavior: 'smooth' }); });
+const tutupEdit = () => { $('mdit').hidden = true; editNo = null; };
+$('eb').onclick = tutupEdit;
+$('fe').onsubmit = e => {
+  e.preventDefault();
+  const n = editNo; if (n == null) return;
+  const b = { nama: $('en').value.trim(), daerah: $('ed').value.trim(), isi: num($('ei').value), lunas: $('el').checked };
+  if (!b.nama) return;
+  const t = $('es'); t.disabled = true;
+  api({ action: 'update', no: n, ...b }, tutupEdit).finally(() => t.disabled = false);
+};
+const tutupDel = () => { $('mdel').hidden = true; delNo = null; };
+$('dc').onclick = tutupDel;
+$('mdel').onclick = e => { if (e.target === $('mdel')) tutupDel(); };
+addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('mdel').hidden) tutupDel(); if (!$('mdit').hidden) tutupEdit(); } });
+$('dy').onclick = () => { const n = delNo; tutupDel(); if (n != null) api({ action: 'delete', no: n }); };
 $('svu').onclick = () => saveUrl($('url').value);
 $('ms').onclick = () => saveUrl($('url2').value);
 $('mc').onclick = () => { pending = null; $('md').hidden = true; };
